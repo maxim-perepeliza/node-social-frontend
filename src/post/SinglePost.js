@@ -37,6 +37,12 @@ class SinglePost extends Component {
                 })
             }
         })
+            .catch(err => {
+                console.log(err)
+                this.setState({
+                    redirectToHome: true
+                })
+            });
     }
 
     deletePost = () => {
