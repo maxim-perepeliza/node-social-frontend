@@ -23,6 +23,21 @@ export const list = (page) => {
         .catch(err => console.log(err));
 }
 
+export const listPostFeed = (page, userId, token) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/posts-feed/${userId}/?page=${page}`, {
+        method: "GET",
+        headers: {
+            Accept: "application/json",
+            'Content-Type': "applucation/json",
+            Authorization: `Bearer ${token}`
+        },
+    })
+        .then(response => {
+            return response.json()
+        })
+        .catch(err => console.log(err));
+}
+
 export const singlePost = (postId) => {
     return fetch(`${process.env.REACT_APP_API_URL}/post/${postId}`, {
         method: "GET"

@@ -15,6 +15,10 @@ const Menu = ({ history }) => {
                 </li>
 
                 <li className="nav-item">
+                    <Link className={"nav-link " + (isActive(history, "/activity") ? "active" : "")} to="/activity">Timeline</Link>
+                </li>
+
+                <li className="nav-item">
                     <Link className={"nav-link " + (isActive(history, "/users") ? "active" : "")} to="/users">Users</Link>
                 </li>
 
