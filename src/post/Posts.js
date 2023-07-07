@@ -8,18 +8,33 @@ class Posts extends Component {
         super()
         this.state = {
             posts: [],
-            initiated: false
+            initiated: false,
+            page: 1
         }
     }
 
-    componentDidMount() {
-        list().then(data => {
+    loadPosts = page => {
+        list(page).then(data => {
             if (data.error) {
-                console.log(data.error)
+                console.log(data.error);
             } else {
                 this.setState({ posts: data, initiated: true })
             }
-        })
+        });
+    };
+
+    loadMore = number => {
+        this.setState({ page: this.state.page + number });
+        this.loadPosts(this.state.page + number);
+    };
+
+    loadLess = number => {
+        this.setState({ page: this.state.page - number });
+        this.loadPosts(this.state.page - number);
+    };
+
+    componentDidMount() {
+        this.loadPosts(this.state.page);
     }
 
     renderPosts = posts => {
@@ -63,15 +78,39 @@ class Posts extends Component {
 
     render() {
 
-        const { posts, initiated } = this.state
+        const { posts, initiated, page } = this.state
 
         return (
             <div className="container">
                 <h2 className="mt-5 mb-5">
-                    {!posts.length && !initiated ? "Loading..." : ("Recent Posts")}
+                    {!initiated && "Loading..."}
+                    {!Boolean(posts.length) && initiated && "No more posts!"}
+                    {Boolean(posts.length) && initiated && "Recent Posts"}
                 </h2>
 
                 {this.renderPosts(posts)}
+
+                {page > 1 ? (
+                    <button
+                        className="btn btn-raised btn-warning mr-5 mt-5 mb-5"
+                        onClick={() => this.loadLess(1)}
+                    >
+                        Previous ({page - 1})
+                    </button>
+                ) : (
+                    ""
+                )}
+
+                {posts.length ? (
+                    <button
+                        className="btn btn-raised btn-success mt-5 mb-5"
+                        onClick={() => this.loadMore(1)}
+                    >
+                        Next ({page + 1})
+                    </button>
+                ) : (
+                    ""
+                )}
             </div>
         );
     }

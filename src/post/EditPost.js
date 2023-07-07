@@ -10,6 +10,7 @@ class EditPost extends Component {
         super()
         this.state = {
             id: "",
+            authorId: "",
             title: "",
             body: "",
             redirectToPost: false,
@@ -20,8 +21,7 @@ class EditPost extends Component {
     }
 
     init = (postId) => {
-        const token = isAuthenticated().token
-        singlePost(postId, token)
+        singlePost(postId)
             .then((data) => {
                 if (data.error) {
                     this.setState({ redirectToPost: true })
@@ -29,6 +29,7 @@ class EditPost extends Component {
                 } else {
                     this.setState({
                         id: data._id,
+                        authorId: data.postedBy._id,
                         title: data.title,
                         body: data.body,
                         error: ""
@@ -112,6 +113,7 @@ class EditPost extends Component {
 
         const {
             id,
+            authorId,
             title,
             body,
             redirectToPost,
@@ -143,7 +145,8 @@ class EditPost extends Component {
                     onError={i => (i.target.src = `${DefaultPostImage}`)}
                 />
 
-                {this.editForm(title, body)}
+                {(isAuthenticated().user.role === "admin" || isAuthenticated().user._id === authorId) &&
+                    this.editForm(title, body)}
             </div>
         );
     }

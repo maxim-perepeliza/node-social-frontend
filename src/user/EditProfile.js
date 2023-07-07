@@ -168,7 +168,9 @@ class EditUser extends Component {
                     onError={i => (i.target.src = `${DefaultProfileImage}`)}
                 />
 
-                {this.editForm(name, email, about, password)}
+                {(isAuthenticated().user.role === "admin" ||
+                    (isAuthenticated().user._id === id) &&
+                    this.editForm(name, email, about, password))}
             </div>
         );
     }
