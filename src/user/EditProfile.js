@@ -59,7 +59,7 @@ class EditUser extends Component {
             return false
         }
 
-        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+        if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
             this.setState({ error: "Email is not valid" })
             return false
         }
@@ -90,6 +90,10 @@ class EditUser extends Component {
                 .then(data => {
                     if (data.error) {
                         this.setState({ error: data.error })
+                    } else if (isAuthenticated().user.role === "admin") {
+                        this.setState({
+                            redirectToProfile: true
+                        });
                     } else {
                         updateLocalUser(data, () => {
                             this.setState({
